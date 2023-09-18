@@ -1,5 +1,6 @@
 
 let url = "https://delta-website.vercel.app/api/inductions/get-products";
+let addToCartButtons = [];
 fetch(url)
     .then((response) => {
         return response.json();
@@ -65,12 +66,11 @@ fetch(url)
 
             let button = document.createElement("button");
             button.innerHTML = "add to cart";
-            div1.appendChild(button)
+            button.id = b
+            addToCartButtons += [[button, b]];
+            div1.appendChild(button);
 
             document.body.appendChild(div1);
             console.log(a1[a]["id"]);
         }
-    }
-    )
-
-    
+    })
