@@ -78,34 +78,53 @@
             button.id = b;
             button.onclick = function () {
                 // Add the selected item to the cart
+                //div1.querySelector("input[name='" + b + "']:checked").value;
                 let selectedItem = {
                     model: a1[a]["model"],
                     basePrice: a1[a]["basePrice"],
-                    selectedRAM: div1.querySelector("input[name='" + b + "1']:checked").value,
-                    selectedStorage: div1.querySelector("input[name='" + b + "']:checked").value,
+                    selectedRAM: a1[a]["RAM"][div1.querySelector("input[name='" + b + "1']:checked").value]["size"],
+                    selectedStorage: a1[a]["storage"][div1.querySelector("input[name='" + b + "']:checked").value]["size"] + " " + a1[a]["storage"][div1.querySelector("input[name='" + b + "']:checked").value]["type"],
+                    finalPrice : a1[a]["storage"][div1.querySelector("input[name='" + b + "']:checked").value]["price"] + a1[a]["RAM"][div1.querySelector("input[name='" + b + "1']:checked").value]["price"] + a1[a]["basePrice"],
                 };
                 cartItems.push(selectedItem);
                 
                 // Update the shopping cart display
                 updateCartDisplay();
             };
+            //updateCartDisplay();
             div1.appendChild(button);
+
+            products = document.getElementById("product")
             
-            document.body.appendChild(div1);;
+            products.appendChild(div1);
+
+            
         }
     });
-    
+
+    const handleRemoveIndexFromCart = (index) => {
+        cartItems.splice(index, 1);
+        updateCartDisplay();
+    };
     
     function updateCartDisplay() {
-    let cartList = document.getElementById("cart-items");
-    cartList.innerHTML = ""; // Clear the current cart display
+        let cartList = document.getElementById("cart-items");
+        cartList.innerHTML = ""; // Clear the current cart display
+        let CartTotal = 0;
     
-    // Iterate through the cart items and display them
-    for (let item of cartItems) {
-        let li = document.createElement("li");
-        li.innerHTML =
-        `${item.model} - Base Price: $${item.basePrice}, ` +
-        `Selected RAM: ${item.selectedRAM}, Selected Storage: ${item.selectedStorage}`;
-        cartList.appendChild(li);
+        // Iterate through the cart items and display them
+        for (let i = 0; i < cartItems.length; i++) {
+            let item = cartItems[i];
+            let li = document.createElement("li");
+            li.innerHTML =
+                `${item.model} - Base Price: $${item.basePrice}, ` +
+                `Selected RAM: ${item.selectedRAM}, Selected Storage: ${item.selectedStorage}, Price: ${item.finalPrice}`;
+            cartList.appendChild(li);
+    
+            cartList.innerHTML += `<button onclick="handleRemoveIndexFromCart(${i})">remove from cart</button>`;
+    
+            CartTotal += item.finalPrice;
+        }
+    
+        cartList.innerHTML += `<br><b>Cart Total</b> : ${CartTotal}`;
     }
-}
